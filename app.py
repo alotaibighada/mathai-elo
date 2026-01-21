@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=200)  # متناسب مع اسم الموقع
+    st.image("elo_logo.png", width=250)  # أكبر حجم للشعار
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI🧮</h1>
@@ -38,9 +38,7 @@ x = symbols("x")
 # Helper Function
 # =====================
 def convert_math(text):
-    """
-    Convert user input into a sympy-compatible expression.
-    """
+    """Convert user input into a sympy-compatible expression."""
     text = text.replace(" ", "")
     text = text.replace("^", "**")
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
@@ -60,10 +58,8 @@ tab1, tab2, tab3 = st.tabs([
 # ---------------------
 with tab1:
     st.subheader("Basic Math Operations")
-
     a = st.number_input("First Number", value=0.0)
     b = st.number_input("Second Number", value=0.0)
-
     operation = st.radio(
         "Choose Operation:",
         ["Add", "Subtract", "Multiply", "Divide"],
@@ -74,15 +70,12 @@ with tab1:
         if operation == "Divide" and b == 0:
             st.error("Division by zero is not allowed.")
         else:
-            if operation == "Add":
-                result = a + b
-            elif operation == "Subtract":
-                result = a - b
-            elif operation == "Multiply":
-                result = a * b
-            elif operation == "Divide":
-                result = a / b
-
+            result = {
+                "Add": a + b,
+                "Subtract": a - b,
+                "Multiply": a * b,
+                "Divide": a / b
+            }[operation]
             st.success(f"Result = {result}")
 
 # ---------------------
@@ -94,9 +87,9 @@ with tab2:
 
     col_dir, col_quad, col_step = st.columns(3)
 
-    # Direct Solution
+    # Direct Solve 📝
     with col_dir:
-        if st.button("✏️ Direct Solve"):
+        if st.button("📝 Direct Solve"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
@@ -108,9 +101,9 @@ with tab2:
             except:
                 st.error("Invalid equation format")
 
-    # Quadratic Formula
+    # Quadratic Formula 📏
     with col_quad:
-        if st.button("📐 Quadratic Formula"):
+        if st.button("📏 Quadratic Formula"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
@@ -129,9 +122,9 @@ with tab2:
             except:
                 st.error("Invalid quadratic equation")
 
-    # Step by Step
+    # Step by Step 🧩
     with col_step:
-        if st.button("🪜 Step by Step"):
+        if st.button("🧩 Step by Step"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
