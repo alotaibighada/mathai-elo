@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    # الصورة الآن تأخذ 80% من العمود لتكون متجاوبة
+    # الصورة الآن متجاوبة
     st.image("elo_logo.png", width=None, use_column_width=True)
 with col2:
     st.markdown("""
@@ -88,13 +88,54 @@ with tab2:
         st.write("<br>", unsafe_allow_html=True)
         
         eq = st.text_input("Enter equation (example: x^2 - 4x + 3 = 0)")
+        method = st.radio(
+            "Choose solution method:",
+            ["Direct Solve", "Quadratic Formula", "Step by Step"]
+        )
+
         if st.button("Solve Equation", key="solve_eq"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
                 st.latex(f"{latex(expr)} = 0")
-                for s in solve(expr, x):
-                    st.latex(f"x = {latex(s)}")
+
+                # ===== Direct Solve =====
+                if method == "Direct Solve":
+                    sols = solve(expr, x)
+                    for s in sols:
+                        st.latex(f"x = {latex(s)}")
+
+                # ===== Quadratic Formula =====
+                elif method == "Quadratic Formula":
+                    coeffs = expr.as_poly(x).all_coeffs()
+                    if len(coeffs) == 3:  # ax^2 + bx + c
+                        a, b, c = coeffs
+                        delta = b**2 - 4*a*c
+                        x1 = (-b + delta**0.5) / (2*a)
+                        x2 = (-b - delta**0.5) / (2*a)
+                        st.latex(f"x_1 = {latex(x1)} , \\quad x_2 = {latex(x2)}")
+                    else:
+                        st.error("Quadratic formula works only for degree 2 equations.")
+
+                # ===== Step by Step =====
+                elif method == "Step by Step":
+                    st.markdown("**Step 1: Expand the equation**")
+                    st.latex(f"{latex(expr)} = 0")
+                    # Factor if possible
+                    factored = expr.factor()
+                    if factored != expr:
+                        st.markdown("**Step 2: Factor the equation**")
+                        st.latex(f"{latex(factored)} = 0")
+                        st.markdown("**Step 3: Solve each factor**")
+                        sols = solve(expr, x)
+                        for s in sols:
+                            st.latex(f"x = {latex(s)}")
+                    else:
+                        st.markdown("Cannot factor further, solving directly:")
+                        sols = solve(expr, x)
+                        for s in sols:
+                            st.latex(f"x = {latex(s)}")
+
             except:
                 st.error("Invalid equation format")
 
@@ -114,7 +155,7 @@ with tab3:
                 ys = [f.subs(x, i) for i in xs]
 
                 # figsize متغير لتناسب الأجهزة الصغيرة
-                fig, ax = plt.subplots(figsize=(max(6, st.get_option('browser.gap', 6)), 5))
+                fig, ax = plt.subplots(figsize=(8,5))
                 ax.plot(xs, ys, label=str(f), color="#1f77b4")
                 ax.axhline(0, color='black')
                 ax.axvline(0, color='black')
