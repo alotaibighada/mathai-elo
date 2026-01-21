@@ -117,28 +117,9 @@ with tab3:
         except:
             st.error("Invalid function")
 
-# ---------------------
-# Tab 4: ELO Training
-# ---------------------
-with tab4:
-    st.subheader("Choose the correct sentence:")
-    q = st.radio(
-        "",
-        [
-            "She don't like coffee.",
-            "She doesn't like coffee.",
-            "She doesn't likes coffee."
-        ]
-    )
-
-    if st.button("Submit Answer", key="elo_answer"):
-        if q == "She doesn't like coffee.":
-            st.success("Correct ✅")
-        else:
-            st.error("Incorrect ❌")
 
 # =====================
 # Footer
 # =====================
 st.divider()
-st.caption("© 2025 Ghada Alotaibi | English Language Olympiad")
+st.caption("© 2026 | English Language Olympiad")
