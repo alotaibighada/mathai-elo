@@ -21,7 +21,7 @@ with col1:
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI🧮</h1>
-    <p style='font-size:12px;'>
+    <p style='font-size:10px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
     </p>
