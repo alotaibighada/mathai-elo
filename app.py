@@ -17,10 +17,19 @@ st.set_page_config(
 # =====================
 x = symbols("x")
 
+# Initialize session state
 if 'points' not in st.session_state:
     st.session_state.points = 0
 if 'history' not in st.session_state:
     st.session_state.history = []
+
+# For quiz results
+if 'quiz_answer' not in st.session_state:
+    st.session_state.quiz_answer = 0.0
+if 'quiz_submitted' not in st.session_state:
+    st.session_state.quiz_submitted = False
+if 'quiz_result' not in st.session_state:
+    st.session_state.quiz_result = ""
 
 # =====================
 # Helper Functions
@@ -33,17 +42,6 @@ def convert_math(text):
 
 def add_to_history(eq, solution):
     st.session_state.history.append({'equation': eq, 'solution': solution})
-
-def quiz_check(correct_answer, user_answer):
-    try:
-        if float(user_answer) == float(correct_answer):
-            st.success("✅ Correct!")
-            st.session_state.points += 1
-            st.balloons()
-        else:
-            st.error(f"❌ Incorrect! Correct answer: {correct_answer}")
-    except:
-        st.error("❌ Please enter a valid number")
 
 # =====================
 # Header
@@ -106,26 +104,13 @@ with tab2:
             expr = expand(sympify(left) - sympify(right))
             st.latex(f"{latex(expr)} = 0")
 
-            # ===== Direct Solve =====
+            sols = solve(expr, x)
+
+            # Display solutions depending on method
             if method == "Direct Solve":
-                sols = solve(expr, x)
+                st.markdown("**Solution:**")
                 for s in sols:
                     st.latex(f"x = {latex(s)}")
-
-                if 'quiz_direct' not in st.session_state:
-                    st.session_state.quiz_direct = 0.0
-
-                with st.form("quiz_direct_form"):
-                    st.session_state.quiz_direct = st.number_input(
-                        "Enter the largest solution (x value) of the equation:",
-                        value=st.session_state.quiz_direct
-                    )
-                    submit = st.form_submit_button("Submit Answer")
-                    if submit:
-                        quiz_check(max(sols), st.session_state.quiz_direct)
-                        add_to_history(eq, sols)
-
-            # ===== Quadratic Formula =====
             elif method == "Quadratic Formula":
                 degree = expr.as_poly(x).degree()
                 coeffs = expr.as_poly(x).all_coeffs()
@@ -139,75 +124,40 @@ with tab2:
                     x2 = (-b_q - delta**0.5) / (2*a_q)
                     st.markdown("**Solution:**")
                     st.latex(f"x_1 = {latex(x1)}, \\quad x_2 = {latex(x2)}")
-
-                    if 'quiz_quad' not in st.session_state:
-                        st.session_state.quiz_quad = 0.0
-
-                    with st.form("quiz_quad_form"):
-                        st.session_state.quiz_quad = st.number_input(
-                            "Enter the largest solution (x value) of the equation:",
-                            value=st.session_state.quiz_quad
-                        )
-                        submit = st.form_submit_button("Submit Answer")
-                        if submit:
-                            quiz_check(max(x1, x2), st.session_state.quiz_quad)
-                            add_to_history(eq, [x1, x2])
+                    sols = [x1, x2]
                 else:
                     st.warning("Quadratic formula only works for degree 2. Using Direct Solve instead.")
-                    sols = solve(expr, x)
-                    for s in sols:
-                        st.latex(f"x = {latex(s)}")
-                    if 'quiz_quad2' not in st.session_state:
-                        st.session_state.quiz_quad2 = 0.0
-                    with st.form("quiz_quad2_form"):
-                        st.session_state.quiz_quad2 = st.number_input(
-                            "Enter the largest solution (x value) of the equation:",
-                            value=st.session_state.quiz_quad2
-                        )
-                        submit = st.form_submit_button("Submit Answer")
-                        if submit:
-                            quiz_check(max(sols), st.session_state.quiz_quad2)
-                            add_to_history(eq, sols)
-
-            # ===== Step by Step =====
             elif method == "Step by Step":
-                st.markdown("**Step 1: Expand the equation**")
+                st.markdown("**Step 1: Expand equation**")
                 st.latex(f"{latex(expr)} = 0")
                 factored = expr.factor()
                 if factored != expr:
-                    st.markdown("**Step 2: Factor the equation**")
+                    st.markdown("**Step 2: Factor equation**")
                     st.latex(f"{latex(factored)} = 0")
-                    st.markdown("**Step 3: Solve each factor**")
-                    sols = solve(expr, x)
-                    for s in sols:
-                        st.latex(f"x = {latex(s)}")
+                st.markdown("**Step 3: Solve equation**")
+                for s in sols:
+                    st.latex(f"x = {latex(s)}")
 
-                    if 'quiz_step' not in st.session_state:
-                        st.session_state.quiz_step = 0.0
-                    with st.form("quiz_step_form"):
-                        st.session_state.quiz_step = st.number_input(
-                            "Enter the largest solution (x value) of the equation:",
-                            value=st.session_state.quiz_step
-                        )
-                        submit = st.form_submit_button("Submit Answer")
-                        if submit:
-                            quiz_check(max(sols), st.session_state.quiz_step)
-                            add_to_history(eq, sols)
-                else:
-                    sols = solve(expr, x)
-                    for s in sols:
-                        st.latex(f"x = {latex(s)}")
-                    if 'quiz_step2' not in st.session_state:
-                        st.session_state.quiz_step2 = 0.0
-                    with st.form("quiz_step2_form"):
-                        st.session_state.quiz_step2 = st.number_input(
-                            "Enter the largest solution (x value) of the equation:",
-                            value=st.session_state.quiz_step2
-                        )
-                        submit = st.form_submit_button("Submit Answer")
-                        if submit:
-                            quiz_check(max(sols), st.session_state.quiz_step2)
-                            add_to_history(eq, sols)
+            # ===== Quiz Form =====
+            st.markdown("---")
+            st.markdown("### Quiz: Identify the largest solution")
+            with st.form("quiz_form"):
+                st.session_state.quiz_answer = st.number_input(
+                    "Enter the largest solution (x value) of the equation:",
+                    value=st.session_state.quiz_answer
+                )
+                submit = st.form_submit_button("Submit Answer")
+                if submit:
+                    st.session_state.quiz_submitted = True
+                    if float(st.session_state.quiz_answer) == float(max(sols)):
+                        st.session_state.quiz_result = "✅ Correct!"
+                        st.session_state.points += 1
+                    else:
+                        st.session_state.quiz_result = f"❌ Incorrect! Correct answer: {max(sols)}"
+                    add_to_history(eq, sols)
+
+            if st.session_state.quiz_submitted:
+                st.info(st.session_state.quiz_result)
 
         except:
             st.error("Invalid equation format")
