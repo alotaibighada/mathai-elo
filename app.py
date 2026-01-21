@@ -13,15 +13,15 @@ st.set_page_config(
 )
 
 # =====================
-# Header & Logo (أكبر شعار وأكثر وضوحًا)
+# Header & Logo
 # =====================
-col1, col2 = st.columns([1, 6])
+col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=450)  # شعار أكبر وواضح
+    st.image("elo_logo.png", width=300)  # أكبر حجم صورة الشعار
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0; font-size:36px;'>Math AI🧮</h1>
-    <p style='font-size:16px;'>
+    <h1 style='margin-bottom:0;'> Math AI🧮</h1>
+    <p style='font-size:12px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
     </p>
