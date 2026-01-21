@@ -112,13 +112,12 @@ with tab2:
                 for s in sols:
                     st.latex(f"x = {latex(s)}")
 
-                # Quiz using Form
                 if 'quiz_direct' not in st.session_state:
                     st.session_state.quiz_direct = 0.0
 
                 with st.form("quiz_direct_form"):
                     st.session_state.quiz_direct = st.number_input(
-                        "Enter the largest x value:",
+                        "Enter the largest solution (x value) of the equation:",
                         value=st.session_state.quiz_direct
                     )
                     submit = st.form_submit_button("Submit Answer")
@@ -141,13 +140,12 @@ with tab2:
                     st.markdown("**Solution:**")
                     st.latex(f"x_1 = {latex(x1)}, \\quad x_2 = {latex(x2)}")
 
-                    # Quiz using Form
                     if 'quiz_quad' not in st.session_state:
                         st.session_state.quiz_quad = 0.0
 
                     with st.form("quiz_quad_form"):
                         st.session_state.quiz_quad = st.number_input(
-                            "Enter the largest x value:",
+                            "Enter the largest solution (x value) of the equation:",
                             value=st.session_state.quiz_quad
                         )
                         submit = st.form_submit_button("Submit Answer")
@@ -163,7 +161,7 @@ with tab2:
                         st.session_state.quiz_quad2 = 0.0
                     with st.form("quiz_quad2_form"):
                         st.session_state.quiz_quad2 = st.number_input(
-                            "Enter the largest x value:",
+                            "Enter the largest solution (x value) of the equation:",
                             value=st.session_state.quiz_quad2
                         )
                         submit = st.form_submit_button("Submit Answer")
@@ -188,7 +186,7 @@ with tab2:
                         st.session_state.quiz_step = 0.0
                     with st.form("quiz_step_form"):
                         st.session_state.quiz_step = st.number_input(
-                            "Enter the largest x value:",
+                            "Enter the largest solution (x value) of the equation:",
                             value=st.session_state.quiz_step
                         )
                         submit = st.form_submit_button("Submit Answer")
@@ -203,7 +201,7 @@ with tab2:
                         st.session_state.quiz_step2 = 0.0
                     with st.form("quiz_step2_form"):
                         st.session_state.quiz_step2 = st.number_input(
-                            "Enter the largest x value:",
+                            "Enter the largest solution (x value) of the equation:",
                             value=st.session_state.quiz_step2
                         )
                         submit = st.form_submit_button("Submit Answer")
