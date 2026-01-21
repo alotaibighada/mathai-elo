@@ -17,7 +17,6 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    # الصورة الآن متجاوبة
     st.image("elo_logo.png", width=None, use_column_width=True)
 with col2:
     st.markdown("""
@@ -39,9 +38,6 @@ x = symbols("x")
 # Helper Function
 # =====================
 def convert_math(text):
-    """
-    Convert user input into a sympy-compatible expression.
-    """
     text = text.replace(" ", "")
     text = text.replace("^", "**")
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
@@ -107,21 +103,24 @@ with tab2:
 
                 # ===== Quadratic Formula =====
                 elif method == "Quadratic Formula":
+                    degree = expr.as_poly(x).degree()
                     coeffs = expr.as_poly(x).all_coeffs()
-                    if len(coeffs) == 3:  # ax^2 + bx + c
+                    if degree == 2:  # فقط للمعادلة التربيعية
                         a, b, c = coeffs
                         delta = b**2 - 4*a*c
                         x1 = (-b + delta**0.5) / (2*a)
                         x2 = (-b - delta**0.5) / (2*a)
                         st.latex(f"x_1 = {latex(x1)} , \\quad x_2 = {latex(x2)}")
                     else:
-                        st.error("Quadratic formula works only for degree 2 equations.")
+                        st.warning(f"Quadratic formula only works for degree 2 equations. Your equation is degree {degree}. Using Direct Solve instead.")
+                        sols = solve(expr, x)
+                        for s in sols:
+                            st.latex(f"x = {latex(s)}")
 
                 # ===== Step by Step =====
                 elif method == "Step by Step":
                     st.markdown("**Step 1: Expand the equation**")
                     st.latex(f"{latex(expr)} = 0")
-                    # Factor if possible
                     factored = expr.factor()
                     if factored != expr:
                         st.markdown("**Step 2: Factor the equation**")
@@ -154,7 +153,6 @@ with tab3:
                 xs = np.linspace(-10, 10, 400)
                 ys = [f.subs(x, i) for i in xs]
 
-                # figsize متغير لتناسب الأجهزة الصغيرة
                 fig, ax = plt.subplots(figsize=(8,5))
                 ax.plot(xs, ys, label=str(f), color="#1f77b4")
                 ax.axhline(0, color='black')
