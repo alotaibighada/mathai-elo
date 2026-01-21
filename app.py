@@ -78,36 +78,49 @@ with tab1:
             st.success(f"Result = {result}")
 
 # ---------------------
-# Tab 2: Equation Solver (with 3 methods)
+# Tab 2: Equation Solver (with selectable method)
 # ---------------------
 with tab2:
     st.subheader("Solve an Equation")
     eq = st.text_input("Enter equation (example: x^2 - 4x + 3 = 0)")
+    
+    method = st.selectbox("Choose solving method:", ["Step by Step", "Direct Solve", "Quadratic Formula"])
+    
     if st.button("Solve Equation", key="solve_eq"):
         try:
             left, right = convert_math(eq).split("=")
             expr = expand(sympify(left) - sympify(right))
-            st.markdown("**Step by Step:**")
-            st.latex(f"{latex(expr)} = 0")  # Step by step (expanded)
+            
+            # -------------------
+            # Step by Step
+            # -------------------
+            if method == "Step by Step":
+                st.markdown("**Step by Step:**")
+                st.latex(f"{latex(expr)} = 0")
+                st.markdown("Now solve using SymPy or by factoring manually.")
 
             # -------------------
             # Direct Solve
             # -------------------
-            st.markdown("**Direct Solve:**")
-            solutions = solve(expr, x)
-            for s in solutions:
-                st.latex(f"x = {latex(s)}")
+            elif method == "Direct Solve":
+                st.markdown("**Direct Solve:**")
+                solutions = solve(expr, x)
+                for s in solutions:
+                    st.latex(f"x = {latex(s)}")
 
             # -------------------
             # Quadratic Formula
             # -------------------
-            # Only if degree 2
-            if expr.as_poly(x).degree() == 2:
-                st.markdown("**Quadratic Formula:**")
-                a_coef = expr.as_poly(x).all_coeffs()[0]
-                b_coef = expr.as_poly(x).all_coeffs()[1]
-                c_coef = expr.as_poly(x).all_coeffs()[2]
-                st.latex(f"x = \\frac{{-({b_coef}) \\pm \\sqrt{{({b_coef})^2 - 4*({a_coef})*({c_coef})}}}}{{2*({a_coef})}}")
+            elif method == "Quadratic Formula":
+                if expr.as_poly(x).degree() == 2:
+                    st.markdown("**Quadratic Formula:**")
+                    a_coef = expr.as_poly(x).all_coeffs()[0]
+                    b_coef = expr.as_poly(x).all_coeffs()[1]
+                    c_coef = expr.as_poly(x).all_coeffs()[2]
+                    st.latex(f"x = \\frac{{-({b_coef}) \\pm \\sqrt{{({b_coef})^2 - 4*({a_coef})*({c_coef})}}}}{{2*({a_coef})}}")
+                else:
+                    st.error("Quadratic Formula works only for degree 2 equations.")
+
         except:
             st.error("Invalid equation format")
 
