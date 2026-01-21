@@ -117,15 +117,24 @@ with tab2:
                     st.latex(f"x = {latex(s)}")
 
             # -------------------
-            # Quadratic Formula
+            # Quadratic Formula (Step by Step)
             # -------------------
             elif method == "Quadratic Formula":
-                if expr.as_poly(x).degree() == 2:
-                    st.markdown("**Quadratic Formula:**")
-                    a_coef = expr.as_poly(x).all_coeffs()[0]
-                    b_coef = expr.as_poly(x).all_coeffs()[1]
-                    c_coef = expr.as_poly(x).all_coeffs()[2]
-                    st.latex(f"x = \\frac{{-({b_coef}) \\pm \\sqrt{{({b_coef})^2 - 4*({a_coef})*({c_coef})}}}}{{2*({a_coef})}}")
+                poly = expr.as_poly(x)
+                if poly.degree() == 2:
+                    st.markdown("**Quadratic Formula Step by Step:**")
+                    a_coef, b_coef, c_coef = poly.all_coeffs()
+                    st.latex(f"a = {a_coef},\\ b = {b_coef},\\ c = {c_coef}")
+                    delta = b_coef**2 - 4*a_coef*c_coef
+                    st.latex(f"\\Delta = b^2 - 4ac = ({b_coef})^2 - 4*({a_coef})*({c_coef}) = {delta}")
+                    st.latex(f"x = \\frac{{-b \\pm \\sqrt{{\\Delta}}}}{{2a}} = "
+                             f"\\frac{{-({b_coef}) \\pm \\sqrt{{{delta}}}}}{{2*({a_coef})}}")
+                    if delta >= 0:
+                        sol1 = (-b_coef + delta**0.5)/(2*a_coef)
+                        sol2 = (-b_coef - delta**0.5)/(2*a_coef)
+                        st.latex(f"x_1 = {sol1},\\ x_2 = {sol2}")
+                    else:
+                        st.latex("Complex roots exist (Δ < 0).")
                 else:
                     st.error("Quadratic Formula works only for degree 2 equations.")
 
