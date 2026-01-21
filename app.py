@@ -140,9 +140,27 @@ with tab2:
             # -------------------
             elif method == "Direct Solve":
                 st.markdown("**Direct Solve:**")
-                solutions = solve(expr, x)
-                for s in solutions:
-                    st.latex(f"x = {latex(s)}")
+                st.latex(f"{latex(expr)} = 0")
+                poly = expr.as_poly(x)
+                deg = poly.degree()
+
+                if deg == 1:
+                    a_coef, b_coef = poly.all_coeffs()
+                    sol = -b_coef / a_coef
+                    st.markdown("Linear equation solution:")
+                    st.latex(f"x = -({b_coef}) / ({a_coef}) = {sol}")
+
+                elif deg == 2:
+                    sols = solve(expr, x)
+                    st.markdown("Quadratic equation solutions:")
+                    for i, s in enumerate(sols, start=1):
+                        st.latex(f"x_{i} = {latex(s)}")
+
+                else:
+                    sols = solve(expr, x)
+                    st.markdown(f"Solutions for degree {deg} equation:")
+                    for i, s in enumerate(sols, start=1):
+                        st.latex(f"x_{i} = {latex(s)}")
 
             # -------------------
             # Quadratic Formula (Step by Step)
