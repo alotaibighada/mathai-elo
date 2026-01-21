@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=None, use_column_width=True)
+    st.image("elo_logo.png", width=250, use_column_width=True)
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0; font-size:calc(24px + 1vw);'> Math AI🧮</h1>
