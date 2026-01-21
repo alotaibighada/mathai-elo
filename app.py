@@ -113,19 +113,13 @@ with tab2:
                 for s in sols:
                     st.latex(f"x = {latex(s)}")
 
-                # Quiz
-                quiz_key = "quiz_direct"
-                if quiz_key not in st.session_state:
-                    st.session_state[quiz_key] = 0.0
-
-                st.session_state[quiz_key] = st.number_input(
-                    "Enter the largest x value:",
-                    value=st.session_state[quiz_key],
-                    key="quiz_direct_input"
-                )
-                if st.button("Submit Answer", key="quiz_direct_button"):
-                    quiz_check(max(sols), st.session_state[quiz_key])
-                    add_to_history(eq, sols)
+                # Quiz inside a Form
+                with st.form(key="quiz_direct_form"):
+                    quiz_answer = st.number_input("Enter the largest x value:")
+                    submit_quiz = st.form_submit_button("Submit Answer")
+                    if submit_quiz:
+                        quiz_check(max(sols), quiz_answer)
+                        add_to_history(eq, sols)
 
             # -------- Quadratic Formula --------
             elif method == "Quadratic Formula":
@@ -142,36 +136,24 @@ with tab2:
                     st.markdown("**Solution:**")
                     st.latex(f"x_1 = {latex(x1)}, \\quad x_2 = {latex(x2)}")
 
-                    quiz_key = "quiz_quad"
-                    if quiz_key not in st.session_state:
-                        st.session_state[quiz_key] = 0.0
-
-                    st.session_state[quiz_key] = st.number_input(
-                        "Enter the largest x value:",
-                        value=st.session_state[quiz_key],
-                        key="quiz_quad_input"
-                    )
-                    if st.button("Submit Answer", key="quiz_quad_button"):
-                        quiz_check(max(x1, x2), st.session_state[quiz_key])
-                        add_to_history(eq, [x1, x2])
+                    # Quiz inside a Form
+                    with st.form(key="quiz_quad_form"):
+                        quiz_answer = st.number_input("Enter the largest x value:")
+                        submit_quiz = st.form_submit_button("Submit Answer")
+                        if submit_quiz:
+                            quiz_check(max(x1, x2), quiz_answer)
+                            add_to_history(eq, [x1, x2])
                 else:
                     st.warning("Quadratic formula only works for degree 2 equations. Using Direct Solve instead.")
                     sols = solve(expr, x)
                     for s in sols:
                         st.latex(f"x = {latex(s)}")
-
-                    quiz_key = "quiz_quad2"
-                    if quiz_key not in st.session_state:
-                        st.session_state[quiz_key] = 0.0
-
-                    st.session_state[quiz_key] = st.number_input(
-                        "Enter the largest x value:",
-                        value=st.session_state[quiz_key],
-                        key="quiz_quad2_input"
-                    )
-                    if st.button("Submit Answer", key="quiz_quad2_button"):
-                        quiz_check(max(sols), st.session_state[quiz_key])
-                        add_to_history(eq, sols)
+                    with st.form(key="quiz_quad2_form"):
+                        quiz_answer = st.number_input("Enter the largest x value:")
+                        submit_quiz = st.form_submit_button("Submit Answer")
+                        if submit_quiz:
+                            quiz_check(max(sols), quiz_answer)
+                            add_to_history(eq, sols)
 
             # -------- Step by Step --------
             elif method == "Step by Step":
@@ -185,37 +167,23 @@ with tab2:
                     sols = solve(expr, x)
                     for s in sols:
                         st.latex(f"x = {latex(s)}")
-
-                    quiz_key = "quiz_step"
-                    if quiz_key not in st.session_state:
-                        st.session_state[quiz_key] = 0.0
-
-                    st.session_state[quiz_key] = st.number_input(
-                        "Enter the largest x value:",
-                        value=st.session_state[quiz_key],
-                        key="quiz_step_input"
-                    )
-                    if st.button("Submit Answer", key="quiz_step_button"):
-                        quiz_check(max(sols), st.session_state[quiz_key])
-                        add_to_history(eq, sols)
+                    with st.form(key="quiz_step_form"):
+                        quiz_answer = st.number_input("Enter the largest x value:")
+                        submit_quiz = st.form_submit_button("Submit Answer")
+                        if submit_quiz:
+                            quiz_check(max(sols), quiz_answer)
+                            add_to_history(eq, sols)
                 else:
                     st.markdown("Cannot factor further, solving directly:")
                     sols = solve(expr, x)
                     for s in sols:
                         st.latex(f"x = {latex(s)}")
-
-                    quiz_key = "quiz_step2"
-                    if quiz_key not in st.session_state:
-                        st.session_state[quiz_key] = 0.0
-
-                    st.session_state[quiz_key] = st.number_input(
-                        "Enter the largest x value:",
-                        value=st.session_state[quiz_key],
-                        key="quiz_step2_input"
-                    )
-                    if st.button("Submit Answer", key="quiz_step2_button"):
-                        quiz_check(max(sols), st.session_state[quiz_key])
-                        add_to_history(eq, sols)
+                    with st.form(key="quiz_step2_form"):
+                        quiz_answer = st.number_input("Enter the largest x value:")
+                        submit_quiz = st.form_submit_button("Submit Answer")
+                        if submit_quiz:
+                            quiz_check(max(sols), quiz_answer)
+                            add_to_history(eq, sols)
 
         except:
             st.error("Invalid equation format")
