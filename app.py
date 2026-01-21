@@ -59,10 +59,10 @@ tab1, tab2, tab3 = st.tabs([
 with tab1:
     st.subheader("Basic Math Operations")
 
-    col1, col2 = st.columns(2)
-    with col1:
+    c1, c2 = st.columns(2)
+    with c1:
         a = st.number_input("First number", value=0.0)
-    with col2:
+    with c2:
         b = st.number_input("Second number", value=0.0)
 
     op = st.radio(
@@ -88,15 +88,35 @@ with tab1:
 # ======================================================
 with tab2:
     st.subheader("Quadratic Equation Solver")
-    st.caption("Example: x^2 - 4x + 3 = 0")
+    st.caption("Standard form: ax² + bx + c = 0")
 
-    eq = st.text_input("Enter equation")
+    # ---------- Suggested equations ----------
+    st.markdown("### Suggested equations:")
+
+    examples = {
+        "x² - 4x + 3 = 0": "x^2 - 4x + 3 = 0",
+        "x² + 5x + 6 = 0": "x^2 + 5x + 6 = 0",
+        "2x² - 3x - 2 = 0": "2x^2 - 3x - 2 = 0"
+    }
+
+    if "eq_value" not in st.session_state:
+        st.session_state.eq_value = ""
+
+    cols = st.columns(len(examples))
+    for col, (label, value) in zip(cols, examples.items()):
+        with col:
+            if st.button(label):
+                st.session_state.eq_value = value
+
+    eq = st.text_input(
+        "Enter equation",
+        value=st.session_state.eq_value,
+        placeholder="Example: x^2 - 4x + 3 = 0"
+    )
 
     colA, colB, colC = st.columns(3)
 
-    # ---------------------------
-    # Method 1 – Direct Solution
-    # ---------------------------
+    # ---------- Direct Solution ----------
     with colA:
         if st.button("🔹 Direct Solution"):
             try:
@@ -110,9 +130,7 @@ with tab2:
             except:
                 st.error("Invalid equation")
 
-    # ---------------------------
-    # Method 2 – Quadratic Formula
-    # ---------------------------
+    # ---------- Quadratic Formula ----------
     with colB:
         if st.button("🔹 Quadratic Formula"):
             try:
@@ -145,9 +163,7 @@ with tab2:
             except:
                 st.error("Invalid equation")
 
-    # ---------------------------
-    # Method 3 – Step by Step
-    # ---------------------------
+    # ---------- Step by Step ----------
     with colC:
         if st.button("🔹 Step by Step"):
             try:
@@ -161,15 +177,15 @@ with tab2:
                 if a == 0:
                     st.error("This is not a quadratic equation")
                 else:
-                    st.markdown("### Step 1: Standard form")
+                    st.markdown("### Step 1: Write in standard form")
                     st.latex(f"{latex(expr)} = 0")
 
                     st.markdown("### Step 2: Identify coefficients")
                     st.markdown(f"a = {a}, b = {b}, c = {c}")
 
-                    st.markdown("### Step 3: Discriminant")
+                    st.markdown("### Step 3: Compute discriminant")
                     D = b**2 - 4*a*c
-                    st.latex(f"D = b^2 - 4ac = {latex(D)}")
+                    st.latex(f"D = {latex(D)}")
 
                     st.markdown("### Step 4: Apply formula")
                     st.latex(r"x = \frac{-b \pm \sqrt{D}}{2a}")
