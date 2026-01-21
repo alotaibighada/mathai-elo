@@ -13,11 +13,11 @@ st.set_page_config(
 )
 
 # =====================
-# Header & Logo (أكبر شعار وأكثر وضوحًا)
+# Header & Logo (متناسق مع اسم الموقع)
 # =====================
-col1, col2 = st.columns([1, 6])
+col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=450)  # شعار أكبر وواضح
+    st.image("9448136c-61b8-4dd9-8366-1b13bc49ef8e.png", width=200)  # شعار أصغر متناسق
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0; font-size:36px;'>Math AI🧮</h1>
