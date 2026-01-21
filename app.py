@@ -1,5 +1,5 @@
 import streamlit as st
-from sympy import symbols, solve, sympify, latex, expand, sqrt
+from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=250)
+    st.image("elo_logo.png", width=300)
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI 🧮</h1>
@@ -35,7 +35,7 @@ st.divider()
 x = symbols("x")
 
 # =====================
-# Helper Functions
+# Helper Function
 # =====================
 def convert_math(text):
     text = text.replace(" ", "")
@@ -43,43 +43,29 @@ def convert_math(text):
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
     return text
 
-
-def equation_type(expr):
-    poly = expr.as_poly(x)
-    if not poly:
-        return "Not a polynomial equation"
-    deg = poly.degree()
-    if deg == 1:
-        return "Linear Equation (Degree 1)"
-    elif deg == 2:
-        return "Quadratic Equation (Degree 2)"
-    else:
-        return f"Polynomial Equation (Degree {deg})"
-
-
 # =====================
 # Tabs
 # =====================
 tab1, tab2, tab3 = st.tabs([
-    "🔢 Basic Operations",
+    "🔢 Math Operations",
     "📐 Equation Solver",
     "📊 Function Plot",
 ])
 
 # ---------------------
-# Tab 1: Basic Operations
+# Tab 1: Math Operations
 # ---------------------
 with tab1:
     st.subheader("Basic Math Operations")
-
+    st.markdown("**Tip for students:** Enter two numbers and select an operation to calculate.")
     a = st.number_input("First number", value=0.0)
     b = st.number_input("Second number", value=0.0)
 
-    op = st.selectbox("Choose operation", ["Add", "Subtract", "Multiply", "Divide"])
+    op = st.selectbox("Select Operation", ["Add", "Subtract", "Multiply", "Divide"])
 
     if st.button("Calculate", key="calc1"):
         if op == "Divide" and b == 0:
-            st.error("❌ Cannot divide by zero")
+            st.error("Oops! Cannot divide by zero.")
         else:
             result = {
                 "Add": a + b,
@@ -87,144 +73,116 @@ with tab1:
                 "Multiply": a * b,
                 "Divide": a / b
             }[op]
-
-            st.markdown(f"""
-            <div style="background:#e8f4ff;padding:15px;border-radius:10px;font-size:20px;">
-            ✅ <strong>Result:</strong> {result}
-            </div>
-            """, unsafe_allow_html=True)
+            st.success(f"The result is: {result}")
 
 # ---------------------
 # Tab 2: Equation Solver
 # ---------------------
 with tab2:
     st.subheader("Solve an Equation")
+    st.markdown("**Tip for students:** Write equations like `x^2 - 4*x + 3 = 0`")
+    eq = st.text_input("Enter your equation:")
 
-    st.markdown("### ✨ Quick Examples:")
-    ex1, ex2, ex3 = st.columns(3)
-
-    if ex1.button("x^2 - 5x + 6 = 0"):
-        st.session_state.eq_input = "x^2 - 5x + 6 = 0"
-    if ex2.button("2x + 3 = 7"):
-        st.session_state.eq_input = "2x + 3 = 7"
-    if ex3.button("x^2 + 4x + 5 = 0"):
-        st.session_state.eq_input = "x^2 + 4x + 5 = 0"
-
-    eq = st.text_input(
-        "Enter equation (example: x^2 - 4x + 3 = 0)",
-        value=st.session_state.get("eq_input", "")
-    )
-
-    st.markdown("### 🧠 Choose solving method:")
-    c1, c2, c3 = st.columns(3)
+    st.markdown("**Choose solving method:**")
+    col1, col2, col3 = st.columns(3)
     method = None
-    if c1.button("📝 Step by Step"):
-        method = "step"
-    if c2.button("⚡ Direct Solve"):
-        method = "direct"
-    if c3.button("📐 Quadratic Formula"):
-        method = "formula"
+    if col1.button("📝 Step by Step"):
+        method = "Step by Step"
+    if col2.button("⚡ Direct Solve"):
+        method = "Direct Solve"
+    if col3.button("📐 Quadratic Formula"):
+        method = "Quadratic Formula"
 
     if method and eq:
         try:
             left, right = convert_math(eq).split("=")
             expr = expand(sympify(left) - sympify(right))
-
-            eq_type = equation_type(expr)
-            st.info(f"📌 Equation Type: {eq_type}")
-
             poly = expr.as_poly(x)
             deg = poly.degree()
 
-            # -------- Step by Step --------
-            if method == "step":
-                st.markdown("## ✏️ Step-by-Step Solution")
+            # Step by Step
+            if method == "Step by Step":
+                st.markdown("**Step by Step Solution:**")
                 st.latex(f"{latex(expr)} = 0")
-
                 if deg == 1:
                     a_coef, b_coef = poly.all_coeffs()
-                    st.latex(f"{a_coef}x + {b_coef} = 0")
+                    st.markdown("Step 1: Identify coefficients for linear equation.")
+                    st.latex(f"{a_coef}*x + {b_coef} = 0")
                     sol = -b_coef / a_coef
+                    st.markdown("Step 2: Solve for x:")
                     st.latex(f"x = -({b_coef}) / ({a_coef}) = {sol}")
-
                 elif deg == 2:
                     a_coef, b_coef, c_coef = poly.all_coeffs()
-                    st.latex(f"a={a_coef},\\ b={b_coef},\\ c={c_coef}")
-                    st.markdown("Try factoring:")
-                    factors = expr.factor()
-                    st.latex(latex(factors))
-                    sols = solve(expr, x)
-                    st.markdown("### Solutions:")
-                    for s in sols:
-                        st.latex(f"x = {latex(s)}")
-
+                    st.markdown("Step 1: Identify coefficients for quadratic equation.")
+                    st.latex(f"a = {a_coef},\\ b = {b_coef},\\ c = {c_coef}")
+                    try:
+                        factors = expr.factor()
+                        st.markdown("Step 2: Factor the equation if possible.")
+                        st.latex(f"Factored form: {latex(factors)}")
+                        sols = solve(expr, x)
+                        st.markdown("Step 3: Solutions:")
+                        for s in sols:
+                            st.latex(f"x = {latex(s)}")
+                    except:
+                        st.markdown("Cannot factor easily. Consider using Quadratic Formula.")
                 else:
-                    st.warning("Detailed steps are available only for degree 1 and 2 equations.")
+                    st.markdown("Step by Step limited for equations degree > 2.")
 
-            # -------- Direct Solve --------
-            elif method == "direct":
-                st.markdown("## ⚡ Direct Solution")
+            # Direct Solve
+            elif method == "Direct Solve":
+                st.markdown("**Direct Solve:**")
                 sols = solve(expr, x)
+                st.markdown(f"Solutions for degree {deg} equation:")
                 for i, s in enumerate(sols, start=1):
                     st.latex(f"x_{i} = {latex(s)}")
 
-            # -------- Quadratic Formula --------
-            elif method == "formula":
+            # Quadratic Formula
+            elif method == "Quadratic Formula":
                 if deg == 2:
-                    st.markdown("## 📐 Quadratic Formula")
                     a_coef, b_coef, c_coef = poly.all_coeffs()
                     delta = b_coef**2 - 4*a_coef*c_coef
-
-                    st.latex(f"a={a_coef},\\ b={b_coef},\\ c={c_coef}")
-                    st.latex(f"\\Delta = b^2 - 4ac = {delta}")
-                    st.latex(r"x = \frac{-b \pm \sqrt{\Delta}}{2a}")
-
-                    sol1 = (-b_coef + sqrt(delta))/(2*a_coef)
-                    sol2 = (-b_coef - sqrt(delta))/(2*a_coef)
-
-                    st.latex(f"x_1 = {latex(sol1)}")
-                    st.latex(f"x_2 = {latex(sol2)}")
+                    st.markdown("**Quadratic Formula Step by Step:**")
+                    st.latex(f"a = {a_coef},\\ b = {b_coef},\\ c = {c_coef}")
+                    st.latex(f"\\Delta = b^2 - 4ac = ({b_coef})^2 - 4*({a_coef})*({c_coef}) = {delta}")
+                    st.latex(f"x = \\frac{{-b \\pm \\sqrt{{\\Delta}}}}{{2a}} = "
+                             f"\\frac{{-({b_coef}) \\pm \\sqrt{{{delta}}}}}{{2*({a_coef})}}")
+                    if delta >= 0:
+                        sol1 = (-b_coef + delta**0.5)/(2*a_coef)
+                        sol2 = (-b_coef - delta**0.5)/(2*a_coef)
+                        st.markdown("Solutions:")
+                        st.latex(f"x_1 = {sol1},\\ x_2 = {sol2}")
+                    else:
+                        st.markdown("Complex roots exist (Δ < 0).")
                 else:
-                    st.error("Quadratic Formula works only for quadratic equations.")
+                    st.error("Quadratic Formula works only for degree 2 equations.")
 
         except:
-            st.error("❌ Invalid equation format")
+            st.error("Invalid equation format. Please check your input.")
 
 # ---------------------
 # Tab 3: Function Plot
 # ---------------------
 with tab3:
     st.subheader("Plot a Function")
-
-    func = st.text_input("Enter function (example: x^2 - 4x + 3)")
-
-    if st.button("📈 Plot Function"):
+    st.markdown("**Tip for students:** Enter a function like `x^2 - 4*x + 3`")
+    func = st.text_input("Enter function:")
+    if st.button("Plot Function", key="plot_func"):
         try:
             f = sympify(convert_math(func))
             xs = np.linspace(-10, 10, 400)
-            ys = [float(f.subs(x, i)) for i in xs]
-
-            roots = solve(f, x)
-
+            ys = [f.subs(x, i) for i in xs]
             fig, ax = plt.subplots()
-            ax.plot(xs, ys, label=str(f))
-
-            for r in roots:
-                if r.is_real:
-                    ax.scatter(float(r), 0)
-
-            ax.axhline(0)
-            ax.axvline(0)
+            ax.plot(xs, ys, label=f"f(x) = {f}", color='blue')
+            ax.axhline(0, color='black')
+            ax.axvline(0, color='black')
             ax.grid(True)
             ax.legend()
-
             st.pyplot(fig)
-
         except:
-            st.error("❌ Invalid function")
+            st.error("Invalid function format. Please check your input.")
 
 # =====================
 # Footer
 # =====================
 st.divider()
-st.caption("© 2026 | English Language Olympiad — Math AI Educational Tool")
+st.caption("© 2026 | English Language Olympiad | Visit: mathai-elo.com")
