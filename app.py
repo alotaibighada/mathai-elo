@@ -107,9 +107,14 @@ with tab2:
                     coeffs = expr.as_poly(x).all_coeffs()
                     if degree == 2:  # فقط للمعادلة التربيعية
                         a, b, c = coeffs
+                        st.markdown("**Quadratic Formula:**")
+                        st.latex(r"x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}")
+                        st.markdown(f"Here, a = {a}, b = {b}, c = {c}")
+                        
                         delta = b**2 - 4*a*c
                         x1 = (-b + delta**0.5) / (2*a)
                         x2 = (-b - delta**0.5) / (2*a)
+                        st.markdown("**Solution:**")
                         st.latex(f"x_1 = {latex(x1)} , \\quad x_2 = {latex(x2)}")
                     else:
                         st.warning(f"Quadratic formula only works for degree 2 equations. Your equation is degree {degree}. Using Direct Solve instead.")
