@@ -83,8 +83,24 @@ with tab1:
 # ---------------------
 with tab2:
     st.subheader("Solve an Equation")
-    eq = st.text_input("Enter quadratic equation (example: x^2 - 4x + 3 = 0)")
 
+    # =====================
+    # Equation Suggestions
+    # =====================
+    eq_examples = [
+        "x^2 - 4x + 3 = 0",
+        "x^2 + 5x + 6 = 0",
+        "2x^2 - 3x - 2 = 0"
+    ]
+
+    if st.button("Show example equations"):
+        eq = st.selectbox("Choose an equation:", eq_examples)
+    else:
+        eq = st.text_input("Or enter your own quadratic equation (example: x^2 - 4x + 3 = 0)")
+
+    # =====================
+    # Solution Buttons
+    # =====================
     col_dir, col_quad, col_step = st.columns(3)
 
     # Direct Solve 📝
@@ -122,9 +138,9 @@ with tab2:
             except:
                 st.error("Invalid quadratic equation")
 
-    # Step by Step 🧩
+    # Step by Step ➡️
     with col_step:
-        if st.button("🧩 Step by Step"):
+        if st.button("➡️ Step by Step"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
