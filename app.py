@@ -3,9 +3,6 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
-from streamlit_extras.colored_header import colored_header
-from streamlit_extras.let_it_rain import rain
-from stqdm import stqdm  # optional progress bars for steps
 
 # =====================
 # Page Configuration
@@ -43,7 +40,7 @@ def quiz_check(correct_answer, user_answer):
         st.success("✅ Correct!")
         st.session_state.points += 1
         # Fun Mode Confetti
-        rain(emoji="🎉")
+        st.balloons()
     else:
         st.error(f"❌ Incorrect! Correct answer: {correct_answer}")
 
@@ -54,7 +51,10 @@ col1, col2 = st.columns([1, 5])
 with col1:
     st.image("elo_logo.png", width=250)
 with col2:
-    colored_header(label="Math AI 🧮", description="Official Training Platform for ELO", color_name="blue")
+    st.markdown("""
+    <h1 style='color:blue; margin-bottom:0;'>Math AI 🧮</h1>
+    <p>Official Training Platform for ELO</p>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
