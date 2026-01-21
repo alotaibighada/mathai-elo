@@ -18,11 +18,11 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=400)
+    st.image("elo_logo.png", width=200)
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI 🧮</h1>
-    <p style='font-size:16px;'>
+    <p style='font-size:12px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
     </p>
@@ -67,9 +67,9 @@ with tab1:
 
     c1, c2 = st.columns(2)
     with c1:
-        a = st.number_input("First number", value=0.0)
+        a = st.number_input("First number", value=0)
     with c2:
-        b = st.number_input("Second number", value=0.0)
+        b = st.number_input("Second number", value=0)
 
     op = st.radio(
         "Choose operation:",
