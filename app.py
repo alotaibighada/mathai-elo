@@ -87,15 +87,13 @@ with tab2:
     # =====================
     # Equation Suggestions
     # =====================
-    eq_examples = [
-        "x^2 - 4x + 3 = 0",
-        "x^2 + 5x + 6 = 0",
-        "2x^2 - 3x - 2 = 0"
-    ]
-
-    # زر لإظهار الاقتراحات
     show_examples = st.checkbox("Show example equations")
     if show_examples:
+        eq_examples = [
+            "x^2 - 4x + 3 = 0",
+            "x^2 + 5x + 6 = 0",
+            "2x^2 - 3x - 2 = 0"
+        ]
         eq = st.selectbox("Choose an example equation:", eq_examples)
     else:
         eq = st.text_input("Or enter your own quadratic equation (example: x^2 - 4x + 3 = 0)")
