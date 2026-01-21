@@ -78,7 +78,7 @@ with tab1:
             st.success(f"Result = {result}")
 
 # ---------------------
-# Tab 2: Equation Solver
+# Tab 2: Equation Solver (with 3 methods)
 # ---------------------
 with tab2:
     st.subheader("Solve an Equation")
@@ -87,10 +87,27 @@ with tab2:
         try:
             left, right = convert_math(eq).split("=")
             expr = expand(sympify(left) - sympify(right))
-            st.latex(f"{latex(expr)} = 0")
+            st.markdown("**Step by Step:**")
+            st.latex(f"{latex(expr)} = 0")  # Step by step (expanded)
 
-            for s in solve(expr, x):
+            # -------------------
+            # Direct Solve
+            # -------------------
+            st.markdown("**Direct Solve:**")
+            solutions = solve(expr, x)
+            for s in solutions:
                 st.latex(f"x = {latex(s)}")
+
+            # -------------------
+            # Quadratic Formula
+            # -------------------
+            # Only if degree 2
+            if expr.as_poly(x).degree() == 2:
+                st.markdown("**Quadratic Formula:**")
+                a_coef = expr.as_poly(x).all_coeffs()[0]
+                b_coef = expr.as_poly(x).all_coeffs()[1]
+                c_coef = expr.as_poly(x).all_coeffs()[2]
+                st.latex(f"x = \\frac{{-({b_coef}) \\pm \\sqrt{{({b_coef})^2 - 4*({a_coef})*({c_coef})}}}}{{2*({a_coef})}}")
         except:
             st.error("Invalid equation format")
 
