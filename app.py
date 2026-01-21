@@ -44,31 +44,35 @@ def convert_math(text):
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
     return text
 
-# ---------------------
-# Tab: Equation Solver
-# ---------------------
+# =====================
+# Equation Solver Tab
+# =====================
 st.subheader("Solve an Equation")
 
-# Initialize session state
+# Initialize session state for input
 if "eq_input" not in st.session_state:
     st.session_state.eq_input = ""
 
-# Input field
+# Input field for equation
 st.session_state.eq_input = st.text_input(
     "Enter your quadratic equation:", st.session_state.eq_input
 )
 
-# Example equations as buttons
+# =====================
+# Suggested Equations as Buttons (appear below input)
+# =====================
 st.write("### Quick Examples:")
 col1, col2, col3 = st.columns(3)
 examples = ["x^2 - 4x + 3 = 0", "x^2 + 5x + 6 = 0", "2x^2 - 3x - 2 = 0"]
+
 for i, col in enumerate([col1, col2, col3]):
     if col.button(examples[i]):
         st.session_state.eq_input = examples[i]
 
 # =====================
-# Solution Buttons with Icons
+# Solution Methods as Buttons
 # =====================
+st.write("### Solve Using:")
 col_dir, col_quad, col_step = st.columns(3)
 
 # Direct Solve 📝
@@ -118,12 +122,12 @@ with col_step:
             a = coeffs.get(x**2, 0)
             b = coeffs.get(x, 0)
             c = coeffs.get(1, 0)
-            st.write("Step 2: Coefficients:")
+            st.write("Step 2: Identify coefficients:")
             st.latex(f"a={a}, b={b}, c={c}")
-            st.write("Step 3: Discriminant Δ = b² - 4ac")
+            st.write("Step 3: Compute discriminant Δ = b² - 4ac")
             discriminant = b**2 - 4*a*c
             st.latex(f"Δ = {discriminant}")
-            st.write("Step 4: Quadratic formula:")
+            st.write("Step 4: Apply quadratic formula:")
             st.latex(f"x = (-b ± √Δ) / (2a)")
             root1 = (-b + discriminant**0.5) / (2*a)
             root2 = (-b - discriminant**0.5) / (2*a)
@@ -132,3 +136,9 @@ with col_step:
             st.latex(f"x₂ = {root2}")
         except:
             st.error("Invalid quadratic equation")
+
+# =====================
+# Footer
+# =====================
+st.divider()
+st.caption("© 2026 | English Language Olympiad")
