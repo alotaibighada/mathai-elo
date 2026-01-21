@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=250)  # أكبر حجم للشعار
+    st.image("elo_logo.png", width=250)
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI🧮</h1>
@@ -93,13 +93,15 @@ with tab2:
         "2x^2 - 3x - 2 = 0"
     ]
 
-    if st.button("Show example equations"):
-        eq = st.selectbox("Choose an equation:", eq_examples)
+    # زر لإظهار الاقتراحات
+    show_examples = st.checkbox("Show example equations")
+    if show_examples:
+        eq = st.selectbox("Choose an example equation:", eq_examples)
     else:
         eq = st.text_input("Or enter your own quadratic equation (example: x^2 - 4x + 3 = 0)")
 
     # =====================
-    # Solution Buttons
+    # Solution Buttons with Icons
     # =====================
     col_dir, col_quad, col_step = st.columns(3)
 
