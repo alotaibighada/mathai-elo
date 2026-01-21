@@ -85,18 +85,25 @@ with tab2:
     st.subheader("Solve an Equation")
 
     # =====================
-    # Equation Suggestions
+    # Equation Suggestions as Buttons
     # =====================
-    show_examples = st.checkbox("Show example equations")
-    if show_examples:
-        eq_examples = [
-            "x^2 - 4x + 3 = 0",
-            "x^2 + 5x + 6 = 0",
-            "2x^2 - 3x - 2 = 0"
-        ]
-        eq = st.selectbox("Choose an example equation:", eq_examples)
-    else:
-        eq = st.text_input("Or enter your own quadratic equation (example: x^2 - 4x + 3 = 0)")
+    eq_examples = [
+        "x^2 - 4x + 3 = 0",
+        "x^2 + 5x + 6 = 0",
+        "2x^2 - 3x - 2 = 0"
+    ]
+
+    # افتراضي المعادلة
+    eq_input = st.text_input("Enter your quadratic equation:", "")
+
+    st.write("### Quick Examples:")
+    col1, col2, col3 = st.columns(3)
+    if col1.button("x² - 4x + 3 = 0"):
+        eq_input = "x^2 - 4x + 3 = 0"
+    if col2.button("x² + 5x + 6 = 0"):
+        eq_input = "x^2 + 5x + 6 = 0"
+    if col3.button("2x² - 3x - 2 = 0"):
+        eq_input = "2x^2 - 3x - 2 = 0"
 
     # =====================
     # Solution Buttons with Icons
@@ -107,7 +114,7 @@ with tab2:
     with col_dir:
         if st.button("📝 Direct Solve"):
             try:
-                left, right = convert_math(eq).split("=")
+                left, right = convert_math(eq_input).split("=")
                 expr = expand(sympify(left) - sympify(right))
                 st.latex(f"{latex(expr)} = 0")
                 sols = solve(expr, x)
@@ -121,7 +128,7 @@ with tab2:
     with col_quad:
         if st.button("📏 Quadratic Formula"):
             try:
-                left, right = convert_math(eq).split("=")
+                left, right = convert_math(eq_input).split("=")
                 expr = expand(sympify(left) - sympify(right))
                 coeffs = expr.as_coefficients_dict()
                 a = coeffs.get(x**2, 0)
@@ -142,7 +149,7 @@ with tab2:
     with col_step:
         if st.button("➡️ Step by Step"):
             try:
-                left, right = convert_math(eq).split("=")
+                left, right = convert_math(eq_input).split("=")
                 expr = expand(sympify(left) - sympify(right))
                 st.write("Step 1: Write in standard form:")
                 st.latex(f"{latex(expr)} = 0")
