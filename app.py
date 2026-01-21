@@ -103,9 +103,37 @@ with tab2:
             # Step by Step
             # -------------------
             if method == "Step by Step":
-                st.markdown("**Step by Step:**")
+                st.markdown("**Step by Step Solution:**")
                 st.latex(f"{latex(expr)} = 0")
-                st.markdown("Now solve using SymPy or by factoring manually.")
+
+                poly = expr.as_poly(x)
+                deg = poly.degree()
+
+                if deg == 1:
+                    # Linear equation
+                    a_coef, b_coef = poly.all_coeffs()
+                    st.latex(f"{a_coef}*x + {b_coef} = 0")
+                    sol = -b_coef / a_coef
+                    st.latex(f"x = -({b_coef}) / ({a_coef}) = {sol}")
+
+                elif deg == 2:
+                    # Quadratic equation
+                    a_coef, b_coef, c_coef = poly.all_coeffs()
+                    st.latex(f"a = {a_coef},\\ b = {b_coef},\\ c = {c_coef}")
+
+                    # Attempt factoring
+                    try:
+                        factors = expr.factor()
+                        st.latex(f"Factored form: {latex(factors)}")
+                        sols = solve(expr, x)
+                        st.markdown("**Solutions:**")
+                        for s in sols:
+                            st.latex(f"x = {latex(s)}")
+                    except:
+                        st.markdown("Cannot factor easily, consider Quadratic Formula.")
+
+                else:
+                    st.markdown("Equation degree > 2, Step by Step limited.")
 
             # -------------------
             # Direct Solve
