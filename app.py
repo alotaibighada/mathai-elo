@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=200)  # متناسب مع اسم الموقع
+    st.image("elo_logo.png", width=400)  # متناسب مع اسم الموقع
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI🧮</h1>
