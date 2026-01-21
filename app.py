@@ -36,6 +36,12 @@ st.divider()
 x = symbols("x")
 
 # =====================
+# Session State Init
+# =====================
+if "eq_value" not in st.session_state:
+    st.session_state.eq_value = ""
+
+# =====================
 # Helper Function
 # =====================
 def convert_math(text):
@@ -91,7 +97,7 @@ with tab2:
     st.caption("Standard form: ax² + bx + c = 0")
 
     # ---------- Suggested equations ----------
-    st.markdown("### Suggested equations:")
+    st.markdown("### Suggested equations")
 
     examples = {
         "x² - 4x + 3 = 0": "x^2 - 4x + 3 = 0",
@@ -99,17 +105,16 @@ with tab2:
         "2x² - 3x - 2 = 0": "2x^2 - 3x - 2 = 0"
     }
 
-    if "eq_value" not in st.session_state:
-        st.session_state.eq_value = ""
-
     cols = st.columns(len(examples))
     for col, (label, value) in zip(cols, examples.items()):
         with col:
             if st.button(label):
                 st.session_state.eq_value = value
 
+    # ---------- Equation Input ----------
     eq = st.text_input(
         "Enter equation",
+        key="equation_input",
         value=st.session_state.eq_value,
         placeholder="Example: x^2 - 4x + 3 = 0"
     )
