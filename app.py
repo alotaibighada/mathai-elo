@@ -49,11 +49,11 @@ def convert_math(text):
 # =====================
 # Tabs
 # =====================
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3 = st.tabs([
     "🔢 Math Operations",
     "📐 Equation Solver",
     "📊 Function Plot",
-    "🇬🇧 ELO Training"
+
 ])
 
 # ---------------------
