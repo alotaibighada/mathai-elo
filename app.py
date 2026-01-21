@@ -9,8 +9,7 @@ import re
 # =====================
 st.set_page_config(
     page_title="Math AI | ELO",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
 # =====================
@@ -18,10 +17,10 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=200)
+    st.image("elo_logo.png", width=250)
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI 🧮</h1>
+    <h1 style='margin-bottom:0;'> Math AI🧮</h1>
     <p style='font-size:12px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
@@ -36,15 +35,12 @@ st.divider()
 x = symbols("x")
 
 # =====================
-# Session State Init
-# =====================
-if "eq_value" not in st.session_state:
-    st.session_state.eq_value = ""
-
-# =====================
 # Helper Function
 # =====================
 def convert_math(text):
+    """
+    Convert user input into a sympy-compatible expression.
+    """
     text = text.replace(" ", "")
     text = text.replace("^", "**")
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
@@ -56,172 +52,127 @@ def convert_math(text):
 tab1, tab2, tab3 = st.tabs([
     "🔢 Math Operations",
     "📐 Equation Solver",
-    "📊 Function Plot"
+    "📊 Function Plot",
 ])
 
-# ======================================================
-# TAB 1 – Math Operations
-# ======================================================
+# ---------------------
+# Tab 1: Math Operations
+# ---------------------
 with tab1:
     st.subheader("Basic Math Operations")
 
-    c1, c2 = st.columns(2)
-    with c1:
-        a = st.number_input("First number", value=0)
-    with c2:
-        b = st.number_input("Second number", value=0)
+    a = st.number_input("First Number", value=0.0)
+    b = st.number_input("Second Number", value=0.0)
 
-    op = st.radio(
-        "Choose operation:",
+    operation = st.radio(
+        "Choose Operation:",
         ["Add", "Subtract", "Multiply", "Divide"],
         horizontal=True
     )
 
     if st.button("Calculate"):
-        if op == "Divide" and b == 0:
-            st.error("Cannot divide by zero")
+        if operation == "Divide" and b == 0:
+            st.error("Division by zero is not allowed.")
         else:
-            result = {
-                "Add": a + b,
-                "Subtract": a - b,
-                "Multiply": a * b,
-                "Divide": a / b
-            }[op]
+            if operation == "Add":
+                result = a + b
+            elif operation == "Subtract":
+                result = a - b
+            elif operation == "Multiply":
+                result = a * b
+            elif operation == "Divide":
+                result = a / b
+
             st.success(f"Result = {result}")
 
-# ======================================================
-# TAB 2 – Equation Solver
-# ======================================================
+# ---------------------
+# Tab 2: Equation Solver
+# ---------------------
 with tab2:
-    st.subheader("Quadratic Equation Solver")
-    st.caption("Standard form: ax² + bx + c = 0")
+    st.subheader("Solve an Equation")
+    eq = st.text_input("Enter quadratic equation (example: x^2 - 4x + 3 = 0)")
 
-    # ---------- Suggested equations ----------
-    st.markdown("### Suggested equations")
+    col_dir, col_quad, col_step = st.columns(3)
 
-    examples = {
-        "x² - 4x + 3 = 0": "x^2 - 4x + 3 = 0",
-        "x² + 5x + 6 = 0": "x^2 + 5x + 6 = 0",
-        "2x² - 3x - 2 = 0": "2x^2 - 3x - 2 = 0"
-    }
-
-    cols = st.columns(len(examples))
-    for col, (label, value) in zip(cols, examples.items()):
-        with col:
-            if st.button(label):
-                st.session_state.eq_value = value
-
-    # ---------- Equation Input ----------
-    eq = st.text_input(
-        "Enter equation",
-        key="equation_input",
-        value=st.session_state.eq_value,
-        placeholder="Example: x^2 - 4x + 3 = 0"
-    )
-
-    colA, colB, colC = st.columns(3)
-
-    # ---------- Direct Solution ----------
-    with colA:
-        if st.button("🔹 Direct Solution"):
+    # Direct Solution
+    with col_dir:
+        if st.button("Direct Solve"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
-                solutions = solve(expr, x)
-
                 st.latex(f"{latex(expr)} = 0")
-                for s in solutions:
+                sols = solve(expr, x)
+                st.write("Roots:")
+                for s in sols:
                     st.latex(f"x = {latex(s)}")
             except:
-                st.error("Invalid equation")
+                st.error("Invalid equation format")
 
-    # ---------- Quadratic Formula ----------
-    with colB:
-        if st.button("🔹 Quadratic Formula"):
+    # Quadratic Formula
+    with col_quad:
+        if st.button("Quadratic Formula"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
-
-                a = expr.coeff(x, 2)
-                b = expr.coeff(x, 1)
-                c = expr.coeff(x, 0)
-
-                if a == 0:
-                    st.error("This is not a quadratic equation")
-                else:
-                    st.markdown("### Quadratic Formula")
-                    st.latex(r"x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}")
-
-                    st.markdown("### Coefficients")
-                    st.markdown(f"a = {a}, b = {b}, c = {c}")
-
-                    D = b**2 - 4*a*c
-                    st.markdown("### Discriminant")
-                    st.latex(f"D = {latex(D)}")
-
-                    x1 = (-b + D**0.5) / (2*a)
-                    x2 = (-b - D**0.5) / (2*a)
-
-                    st.markdown("### Solutions")
-                    st.latex(f"x_1 = {latex(x1)}")
-                    st.latex(f"x_2 = {latex(x2)}")
+                coeffs = expr.as_coefficients_dict()
+                a = coeffs.get(x**2, 0)
+                b = coeffs.get(x, 0)
+                c = coeffs.get(1, 0)
+                st.latex(f"x = (-b ± √(b² - 4ac)) / 2a")
+                st.latex(f"a={a}, b={b}, c={c}")
+                discriminant = b**2 - 4*a*c
+                root1 = (-b + discriminant**0.5) / (2*a)
+                root2 = (-b - discriminant**0.5) / (2*a)
+                st.write("Roots:")
+                st.latex(f"x₁ = {root1}")
+                st.latex(f"x₂ = {root2}")
             except:
-                st.error("Invalid equation")
+                st.error("Invalid quadratic equation")
 
-    # ---------- Step by Step ----------
-    with colC:
-        if st.button("🔹 Step by Step"):
+    # Step by Step
+    with col_step:
+        if st.button("Step by Step"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
-
-                a = expr.coeff(x, 2)
-                b = expr.coeff(x, 1)
-                c = expr.coeff(x, 0)
-
-                if a == 0:
-                    st.error("This is not a quadratic equation")
-                else:
-                    st.markdown("### Step 1: Write in standard form")
-                    st.latex(f"{latex(expr)} = 0")
-
-                    st.markdown("### Step 2: Identify coefficients")
-                    st.markdown(f"a = {a}, b = {b}, c = {c}")
-
-                    st.markdown("### Step 3: Compute discriminant")
-                    D = b**2 - 4*a*c
-                    st.latex(f"D = {latex(D)}")
-
-                    st.markdown("### Step 4: Apply formula")
-                    st.latex(r"x = \frac{-b \pm \sqrt{D}}{2a}")
-
-                    x1 = (-b + D**0.5) / (2*a)
-                    x2 = (-b - D**0.5) / (2*a)
-
-                    st.markdown("### Final Answer")
-                    st.latex(f"x_1 = {latex(x1)}")
-                    st.latex(f"x_2 = {latex(x2)}")
+                st.write("Step 1: Write in standard form:")
+                st.latex(f"{latex(expr)} = 0")
+                coeffs = expr.as_coefficients_dict()
+                a = coeffs.get(x**2, 0)
+                b = coeffs.get(x, 0)
+                c = coeffs.get(1, 0)
+                st.write("Step 2: Identify coefficients:")
+                st.latex(f"a={a}, b={b}, c={c}")
+                st.write("Step 3: Compute discriminant Δ = b² - 4ac")
+                discriminant = b**2 - 4*a*c
+                st.latex(f"Δ = {discriminant}")
+                st.write("Step 4: Apply quadratic formula:")
+                st.latex(f"x = (-b ± √Δ) / (2a)")
+                root1 = (-b + discriminant**0.5) / (2*a)
+                root2 = (-b - discriminant**0.5) / (2*a)
+                st.write("Step 5: Roots:")
+                st.latex(f"x₁ = {root1}")
+                st.latex(f"x₂ = {root2}")
             except:
-                st.error("Invalid equation")
+                st.error("Invalid quadratic equation")
 
-# ======================================================
-# TAB 3 – Function Plot
-# ======================================================
+# ---------------------
+# Tab 3: Function Plot
+# ---------------------
 with tab3:
-    st.subheader("Function Plot")
+    st.subheader("Plot a Function")
     func = st.text_input("Enter function (example: x^2 - 4x + 3)")
-
     if st.button("Plot Function"):
         try:
             f = sympify(convert_math(func))
             xs = np.linspace(-10, 10, 400)
             ys = [f.subs(x, i) for i in xs]
-
             fig, ax = plt.subplots()
-            ax.plot(xs, ys)
-            ax.axhline(0)
-            ax.axvline(0)
+            ax.plot(xs, ys, label=str(f))
+            ax.axhline(0, color='black')
+            ax.axvline(0, color='black')
             ax.grid(True)
+            ax.legend()
             st.pyplot(fig)
         except:
             st.error("Invalid function")
@@ -230,4 +181,4 @@ with tab3:
 # Footer
 # =====================
 st.divider()
-st.caption("© 2026 | Math AI – English Language Olympiad")
+st.caption("© 2026 | English Language Olympiad")
