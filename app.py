@@ -78,19 +78,27 @@ with tab1:
             st.success(f"Result = {result}")
 
 # ---------------------
-# Tab 2: Equation Solver (with selectable method)
+# Tab 2: Equation Solver (with buttons)
 # ---------------------
 with tab2:
     st.subheader("Solve an Equation")
     eq = st.text_input("Enter equation (example: x^2 - 4x + 3 = 0)")
-    
-    method = st.selectbox("Choose solving method:", ["Step by Step", "Direct Solve", "Quadratic Formula"])
-    
-    if st.button("Solve Equation", key="solve_eq"):
+
+    st.markdown("**Choose solving method:**")
+    col1, col2, col3 = st.columns(3)
+    method = None
+    if col1.button("📝 Step by Step"):
+        method = "Step by Step"
+    if col2.button("⚡ Direct Solve"):
+        method = "Direct Solve"
+    if col3.button("📐 Quadratic Formula"):
+        method = "Quadratic Formula"
+
+    if method and eq:
         try:
             left, right = convert_math(eq).split("=")
             expr = expand(sympify(left) - sympify(right))
-            
+
             # -------------------
             # Step by Step
             # -------------------
