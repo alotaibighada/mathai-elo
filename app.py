@@ -17,7 +17,7 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1, 5])
 with col1:
-    st.image("elo_logo.png", width=400)  # متناسب مع اسم الموقع
+    st.image("elo_logo.png", width=200)  # متناسب مع اسم الموقع
 with col2:
     st.markdown("""
     <h1 style='margin-bottom:0;'> Math AI🧮</h1>
@@ -96,7 +96,7 @@ with tab2:
 
     # Direct Solution
     with col_dir:
-        if st.button("Direct Solve"):
+        if st.button("✏️ Direct Solve"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
@@ -110,7 +110,7 @@ with tab2:
 
     # Quadratic Formula
     with col_quad:
-        if st.button("Quadratic Formula"):
+        if st.button("📐 Quadratic Formula"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
@@ -131,7 +131,7 @@ with tab2:
 
     # Step by Step
     with col_step:
-        if st.button("Step by Step"):
+        if st.button("🪜 Step by Step"):
             try:
                 left, right = convert_math(eq).split("=")
                 expr = expand(sympify(left) - sympify(right))
