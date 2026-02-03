@@ -3,7 +3,7 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
-from PIL import Image  # لاستخدام فتح الصورة مباشرة
+from PIL import Image  # فتح الصورة مباشرة لضمان عدم حدوث MediaFileStorageError
 
 # =====================
 # Page Configuration
@@ -20,10 +20,10 @@ col1, col2 = st.columns([1, 5])
 
 with col1:
     try:
-        image = Image.open("logo_elo.png")  # افتح الصورة مباشرة
+        image = Image.open("elo_logo.png")  # افتح الصورة من نفس مجلد app.py
         st.image(image, width=150)
-    except:
-        st.warning("Logo not found. Make sure 'logo_elo.png' is in the same folder as app.py")
+    except FileNotFoundError:
+        st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
 
 with col2:
     st.markdown("""
