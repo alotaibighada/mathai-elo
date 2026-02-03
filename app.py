@@ -21,7 +21,7 @@ col1, col2 = st.columns([1, 5])
 with col1:
     try:
         image = Image.open("elo_logo.png")  # افتح الصورة من نفس مجلد app.py
-        st.image(image, width=150)
+        st.image(image, width=400)
     except FileNotFoundError:
         st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
 
