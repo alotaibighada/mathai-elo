@@ -20,7 +20,7 @@ with col1:
     st.image("elo_logo.png", width=400)  # أكبر حجم صورة الشعار
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI🧮</h1>
+    <h1 style='margin-bottom:0;'> Math AI </h1>
     <p style='font-size:12px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
