@@ -16,26 +16,25 @@ st.set_page_config(
 # =====================
 # Header with Logo ثابت
 # =====================
-with st.container():
-    col1, col2 = st.columns([1, 5])
-    
-    # العمود الأيسر للشعار
-    with col1:
-        try:
-            logo = Image.open("elo_logo.png")  # يجب أن تكون الصورة في نفس مجلد app.py
-            st.image(logo, width=150)
-        except FileNotFoundError:
-            st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
-    
-    # العمود الأيمن للنص
-    with col2:
-        st.markdown("""
-        <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
-        <p style='font-size:12px;'>
-        Official Training Platform for<br>
-        <strong>English Language Olympiad (ELO)</strong>
-        </p>
-        """, unsafe_allow_html=True)
+col1, col2 = st.columns([1, 5])
+
+# العمود الأيسر للشعار
+with col1:
+    try:
+        logo = Image.open("elo_logo.png")  # الصورة في نفس مجلد app.py
+        st.image(logo, width=150)
+    except FileNotFoundError:
+        st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
+
+# العمود الأيمن للنص
+with col2:
+    st.markdown("""
+    <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
+    <p style='font-size:12px;'>
+    Official Training Platform for<br>
+    <strong>English Language Olympiad (ELO)</strong>
+    </p>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
