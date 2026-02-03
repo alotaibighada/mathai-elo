@@ -3,7 +3,7 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
-from PIL import Image  # فتح الصورة مباشرة لضمان عدم حدوث MediaFileStorageError
+from PIL import Image
 
 # =====================
 # Page Configuration
@@ -14,25 +14,28 @@ st.set_page_config(
 )
 
 # =====================
-# Header with Logo
+# Header with Logo ثابت
 # =====================
-col1, col2 = st.columns([1, 5])
-
-with col1:
-    try:
-        image = Image.open("elo_logo.png")  # افتح الصورة من نفس مجلد app.py
-        st.image(image, width=150)
-    except FileNotFoundError:
-        st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
-
-with col2:
-    st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
-    <p style='font-size:12px;'>
-    Official Training Platform for<br>
-    <strong>English Language Olympiad (ELO)</strong>
-    </p>
-    """, unsafe_allow_html=True)
+with st.container():
+    col1, col2 = st.columns([1, 5])
+    
+    # العمود الأيسر للشعار
+    with col1:
+        try:
+            logo = Image.open("elo_logo.png")  # يجب أن تكون الصورة في نفس مجلد app.py
+            st.image(logo, width=150)
+        except FileNotFoundError:
+            st.warning("Logo not found. Make sure 'elo_logo.png' is in the same folder as app.py")
+    
+    # العمود الأيمن للنص
+    with col2:
+        st.markdown("""
+        <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
+        <p style='font-size:12px;'>
+        Official Training Platform for<br>
+        <strong>English Language Olympiad (ELO)</strong>
+        </p>
+        """, unsafe_allow_html=True)
 
 st.divider()
 
