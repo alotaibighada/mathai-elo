@@ -13,15 +13,31 @@ st.set_page_config(
 )
 
 # =====================
-# Header (بدون شعار)
+# Header with Text Logo (بديل عن الصورة)
 # =====================
-st.markdown("""
-<h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
-<p style='font-size:12px;'>
-Official Training Platform for<br>
-<strong>English Language Olympiad (ELO)</strong>
-</p>
-""", unsafe_allow_html=True)
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.markdown("""
+    <div style='
+        font-size:48px;
+        font-weight:bold;
+        color:#1f77b4;
+        text-align:center;
+        line-height:1;
+    '>
+    🧮
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <h1 style='margin-bottom:0;'> Math AI </h1>
+    <p style='font-size:12px;'>
+    Official Training Platform for<br>
+    <strong>English Language Olympiad (ELO)</strong>
+    </p>
+    """, unsafe_allow_html=True)
 
 st.divider()
 
