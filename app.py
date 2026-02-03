@@ -18,7 +18,7 @@ st.set_page_config(
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("elo_logo.png", width=150)  # الشعار هنا في نفس مجلد app.py
+    st.image("elo_logo.png", width=150)  # الشعار في نفس مجلد app.py
 
 with col2:
     st.markdown("""
