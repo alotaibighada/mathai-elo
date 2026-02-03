@@ -3,7 +3,6 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
-from PIL import Image  # لإصلاح مشاكل الصور
 
 # =====================
 # Page Configuration
@@ -14,25 +13,15 @@ st.set_page_config(
 )
 
 # =====================
-# Header & Logo
+# Header (بدون شعار)
 # =====================
-col1, col2 = st.columns([1, 5])
-
-with col1:
-    try:
-        img = Image.open("assets/elo_logo.png")  # ضع الصورة داخل مجلد assets
-        st.image(img, width=400)
-    except FileNotFoundError:
-        st.warning("Logo not found. Please upload 'elo_logo.png' in the 'assets' folder.")
-
-with col2:
-    st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
-    <p style='font-size:12px;'>
-    Official Training Platform for<br>
-    <strong>English Language Olympiad (ELO)</strong>
-    </p>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
+<p style='font-size:12px;'>
+Official Training Platform for<br>
+<strong>English Language Olympiad (ELO)</strong>
+</p>
+""", unsafe_allow_html=True)
 
 st.divider()
 
@@ -45,7 +34,6 @@ x = symbols("x")
 # Helper Function
 # =====================
 def convert_math(text):
-    """Convert user input into a sympy-compatible expression."""
     text = text.replace(" ", "")
     text = text.replace("^", "**")
     text = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', text)
