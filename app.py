@@ -3,6 +3,7 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
+from PIL import Image  # لاستخدام فتح الصورة مباشرة
 
 # =====================
 # Page Configuration
@@ -18,7 +19,11 @@ st.set_page_config(
 col1, col2 = st.columns([1, 5])
 
 with col1:
-    st.image("elo_logo.png", width=150)  # الشعار في نفس مجلد app.py
+    try:
+        image = Image.open("logo_elo.png")  # افتح الصورة مباشرة
+        st.image(image, width=150)
+    except:
+        st.warning("Logo not found. Make sure 'logo_elo.png' is in the same folder as app.py")
 
 with col2:
     st.markdown("""
