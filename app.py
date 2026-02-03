@@ -3,6 +3,7 @@ from sympy import symbols, solve, sympify, latex, expand
 import numpy as np
 import matplotlib.pyplot as plt
 import re
+from PIL import Image  # لإصلاح مشاكل الصور
 
 # =====================
 # Page Configuration
@@ -16,11 +17,17 @@ st.set_page_config(
 # Header & Logo
 # =====================
 col1, col2 = st.columns([1, 5])
+
 with col1:
-    st.image("elo_logo.png", width=400)  # أكبر حجم صورة الشعار
+    try:
+        img = Image.open("assets/elo_logo.png")  # ضع الصورة داخل مجلد assets
+        st.image(img, width=400)
+    except FileNotFoundError:
+        st.warning("Logo not found. Please upload 'elo_logo.png' in the 'assets' folder.")
+
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI🧮</h1>
+    <h1 style='margin-bottom:0;'> Math AI 🧮 </h1>
     <p style='font-size:12px;'>
     Official Training Platform for<br>
     <strong>English Language Olympiad (ELO)</strong>
@@ -80,16 +87,14 @@ with tab1:
 with tab2:
     st.subheader("Solve an Equation")
 
-    # Session state for input
     if "eq_input" not in st.session_state:
         st.session_state.eq_input = ""
 
-    # Input field
     st.session_state.eq_input = st.text_input(
         "Enter your quadratic equation:", st.session_state.eq_input
     )
 
-    # Quick examples as buttons
+    # Quick examples
     st.write("### Quick Examples:")
     col1, col2, col3 = st.columns(3)
     examples = ["x^2 - 4x + 3 = 0", "x^2 + 5x + 6 = 0", "2x^2 - 3x - 2 = 0"]
@@ -125,8 +130,6 @@ with tab2:
                 a = coeffs.get(x**2, 0)
                 b = coeffs.get(x, 0)
                 c = coeffs.get(1, 0)
-                st.latex(f"x = (-b ± √(b² - 4ac)) / 2a")
-                st.latex(f"a={a}, b={b}, c={c}")
                 discriminant = b**2 - 4*a*c
                 root1 = (-b + discriminant**0.5) / (2*a)
                 root2 = (-b - discriminant**0.5) / (2*a)
