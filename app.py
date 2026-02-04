@@ -13,17 +13,17 @@ st.set_page_config(
 )
 
 # =====================
-# Header & Logo
+# Header & Logo with Emoji 🤖
 # =====================
-col1, col2 = st.columns([1, 5])
+col1, col2 = st.columns([1,5])
 with col1:
-    st.image("elo_logo.png", width=150)
+    st.image("elo_logo.png", width=100)  # شعار المنصة
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI 🧮</h1>
+    <h1 style='margin-bottom:0;'> Math AI 🤖</h1>
     <p style='font-size:14px;'>
-    Official Training Platform for<br>
-    <strong>English Language Olympiad (ELO)</strong>
+        Official Training Platform for<br>
+        <strong>English Language Olympiad (ELO)</strong>
     </p>
     """, unsafe_allow_html=True)
 
@@ -78,16 +78,13 @@ with tab1:
 with tab2:
     st.subheader("Solve an Equation")
 
-    # Session state for input
     if "eq_input" not in st.session_state:
         st.session_state.eq_input = ""
 
-    # Input field
     st.session_state.eq_input = st.text_input(
         "Enter your quadratic equation:", st.session_state.eq_input
     )
 
-    # Quick examples as buttons
     st.write("### Quick Examples:")
     col1, col2, col3 = st.columns(3)
     examples = ["x^2 - 4x + 3 = 0", "x^2 + 5x + 6 = 0", "2x^2 - 3x - 2 = 0"]
@@ -95,7 +92,6 @@ with tab2:
         if col.button(examples[i]):
             st.session_state.eq_input = examples[i]
 
-    # Solution buttons
     st.write("### Solve Using:")
     col_dir, col_quad, col_step = st.columns(3)
 
