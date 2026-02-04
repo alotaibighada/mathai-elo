@@ -17,11 +17,11 @@ st.set_page_config(
 # =====================
 col1, col2 = st.columns([1,5])
 with col1:
-    st.image("elo_logo.png", width=100)  # شعار المنصة
+    st.image("elo_logo.png", width=150)  # تكبير الشعار
 with col2:
     st.markdown("""
-    <h1 style='margin-bottom:0;'> Math AI 🤖</h1>
-    <p style='font-size:14px;'>
+    <h1 style='margin-bottom:0; font-size:48px;'> Math AI 🤖</h1>
+    <p style='font-size:16px;'>
         Official Training Platform for<br>
         <strong>English Language Olympiad (ELO)</strong>
     </p>
